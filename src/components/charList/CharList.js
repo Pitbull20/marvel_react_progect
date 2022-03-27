@@ -1,4 +1,4 @@
-import React, { Component } from 'react/cjs/react.development';
+import { React, Component } from 'react/cjs/react.development';
 import MarvelService from './../../servises/MarvelService';
 import ErrorMessage from '../errorMessage/errorMesssage';
 import Spinner from './../Spinner/Spinner';

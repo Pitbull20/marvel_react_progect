@@ -70,9 +70,6 @@ class RandomChar extends Component {
 		);
 	}
 }
-
-export default RandomChar;
-
 const View = ({ char }) => {
 	const { name, descpription, thumbnail, homepage, wiki } = char;
 	let imgStyle = {};
@@ -105,3 +102,5 @@ const View = ({ char }) => {
 		</div>
 	);
 };
+
+export default RandomChar;
