@@ -6,12 +6,15 @@ import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 class RandomChar extends Component {
-	state = {
-		char: {},
-		loading: true,
-		error: false,
-		
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			char: {},
+			loading: true,
+			error: false,
+		};
+	}
+
 	onError = () => {
 		this.setState({ loading: false, error: true });
 	};
@@ -73,7 +76,10 @@ export default RandomChar;
 const View = ({ char }) => {
 	const { name, descpription, thumbnail, homepage, wiki } = char;
 	let imgStyle = {};
-	if (thumbnail ==='http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+	if (
+		thumbnail ===
+		'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
+	) {
 		imgStyle = { objectFit: 'contain' };
 	}
 	return (

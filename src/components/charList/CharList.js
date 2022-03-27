@@ -6,15 +6,17 @@ import PropTypes from 'prop-types';
 import './charList.scss';
 
 class CharList extends Component {
-	state = {
-		charList: [],
-		loading: true,
-		error: false,
-		newItemLoading: false,
-		offset: 210,
-		charEnded: false,
-	};
-
+	constructor(props) {
+		super(props);
+		this.state = {
+			charList: [],
+			loading: true,
+			error: false,
+			newItemLoading: false,
+			offset: 210,
+			charEnded: false,
+		};
+	}
 	marvelService = new MarvelService();
 
 	componentDidMount() {

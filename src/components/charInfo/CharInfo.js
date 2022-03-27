@@ -6,11 +6,14 @@ import Skeleton from '../skeleton/Skeleton';
 import './charInfo.scss';
 
 class CharInfo extends Component {
-	state = {
-		char: null,
-		loading: false,
-		error: false,
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			char: null,
+			loading: false,
+			error: false,
+		};
+	}
 
 	marvelService = new MarvelService();
 

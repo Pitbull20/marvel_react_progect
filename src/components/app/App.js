@@ -7,9 +7,12 @@ import ErrorBoundary from './../errorBoundary/ErrorBoundary';
 import decoration from '../../resources/img/vision.png';
 
 class App extends Component {
-	state = {
-		selectedChar: null,
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			selectedChar: null,
+		};
+	}
 	onCharSelected = id => {
 		this.setState({
 			selectedChar: id,
