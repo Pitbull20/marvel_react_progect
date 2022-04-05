@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import MarvelService from './../../servises/MarvelService';
+import useMarvelService from './../../servises/MarvelService';
 import Spinner from '../Spinner/Spinner';
 import ErrorMessage from '../errorMessage/errorMesssage';
 import Skeleton from '../skeleton/Skeleton';
@@ -8,38 +8,25 @@ import './charInfo.scss';
 
 const CharInfo = props => {
 	const [char, setChar] = useState(null);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
-
-	const marvelService = new MarvelService();
+	const { loading, error, getCharacter, clearError } = useMarvelService();
 
 	useEffect(() => {
 		updateChar();
+		// eslint-disable-next-line
 	}, [props.charId]);
 
 	const updateChar = () => {
+		clearError();
 		const { charId } = props;
 		if (!charId) {
 			return;
 		}
-		onCharLoading();
-		marvelService.getCharacter(charId).then(onCharLoaded).catch(onError);
+		getCharacter(charId).then(onCharLoaded);
 	};
 
 	const onCharLoaded = char => {
-		setLoading(false);
 		setChar(char);
 	};
-
-	const onCharLoading = () => {
-		setLoading(true);
-	};
-
-	const onError = () => {
-		setError(true);
-		setLoading(false);
-	};
-
 	const skeleton = char || loading || error ? null : <Skeleton />;
 	const errorMessage = error ? <ErrorMessage /> : null;
 	const spinner = loading ? <Spinner /> : null;
@@ -56,7 +43,7 @@ const CharInfo = props => {
 };
 
 const View = ({ char }) => {
-	const { name, description, thumbnail, homepage, wiki, comics } = char;
+	const { name, descpription, thumbnail, homepage, wiki, comics } = char;
 
 	let imgStyle = { objectFit: 'cover' };
 	if (
@@ -82,7 +69,7 @@ const View = ({ char }) => {
 					</div>
 				</div>
 			</div>
-			<div className='char__descr'>{description}</div>
+			<div className='char__descr'>{descpription}</div>
 			<div className='char__comics'>Comics:</div>
 			<ul className='char__comics-list'>
 				{comics.length > 0

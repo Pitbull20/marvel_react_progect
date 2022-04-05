@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import MarvelService from '../../servises/MarvelService';
+import useMarvelService from '../../servises/MarvelService';
 import Spinner from './../Spinner/Spinner';
 import ErrorMessage from '../errorMessage/errorMesssage';
 import './randomChar.scss';
@@ -7,33 +7,18 @@ import mjolnir from '../../resources/img/mjolnir.png';
 
 const RandomChar = () => {
 	const [char, setChar] = useState(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(false);
-
-	const marvelService = new MarvelService();
-
+	const { loading, error, getCharacter, clearError } = useMarvelService();
 	useEffect(() => {
 		updateChar();
+		// eslint-disable-next-line
 	}, []);
-
 	const onCharLoaded = char => {
-		setLoading(false);
 		setChar(char);
 	};
-
-	const onCharLoading = () => {
-		setLoading(true);
-	};
-
-	const onError = () => {
-		setError(true);
-		setLoading(false);
-	};
-
 	const updateChar = () => {
+		clearError();
 		const id = Math.floor(Math.random() * (1011400 - 1011000)) + 1011000;
-		onCharLoading();
-		marvelService.getCharacter(id).then(onCharLoaded).catch(onError);
+		getCharacter(id).then(onCharLoaded);
 	};
 
 	const errorMessage = error ? <ErrorMessage /> : null;
@@ -66,7 +51,7 @@ const RandomChar = () => {
 };
 
 const View = ({ char }) => {
-	const { name, description, thumbnail, homepage, wiki } = char;
+	const { name, descpription, thumbnail, homepage, wiki } = char;
 	let imgStyle = { objectFit: 'cover' };
 	if (
 		thumbnail ===
@@ -85,7 +70,7 @@ const View = ({ char }) => {
 			/>
 			<div className='randomchar__info'>
 				<p className='randomchar__name'>{name}</p>
-				<p className='randomchar__descr'>{description}</p>
+				<p className='randomchar__descr'>{descpription}</p>
 				<div className='randomchar__btns'>
 					<a href={homepage} className='button button__main'>
 						<div className='inner'>homepage</div>

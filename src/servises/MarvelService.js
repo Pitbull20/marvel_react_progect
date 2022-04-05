@@ -1,31 +1,30 @@
-class MarvelService {
-	#apiBase = 'https://gateway.marvel.com:443/v1/public/';
-	#apiKey = '67917fa6e0f3d0853c5b2e5c84f10d51';
-	_baseOffset = 210;
-	getResourse = async url => {
-		let res = await fetch(url);
+import { useHttp } from '../hooks/http.hook';
 
-		if (!res.ok) {
-			throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-		}
+const useMarvelService = () => {
+	const { loading, request, error, clearError } = useHttp();
+	const apiBase = 'https://gateway.marvel.com:443/v1/public/';
+	const apiKey = '67917fa6e0f3d0853c5b2e5c84f10d51';
+	let baseOffset = 210;
 
-		return await res.json();
-	};
-	getAllCharacters = async (offset = this._baseOffset) => {
-		const res = await this.getResourse(
-			`${this.#apiBase}characters?limit=9&offset=${offset}&apikey=${
-				this.#apiKey
-			}`
+	const getAllCharacters = async (offset = baseOffset) => {
+		const res = await request(
+			`${apiBase}characters?limit=9&offset=${offset}&apikey=${apiKey}`
 		);
-		return res.data.results.map(this._transformCharacter);
+		return res.data.results.map(transformCharacter);
 	};
-	getCharacter = async id => {
-		const res = await this.getResourse(
-			`${this.#apiBase}characters/${id}?apikey=${this.#apiKey}`
+	const getAllComics = async (offset = baseOffset) => {
+		const comics = await request(
+			`${apiBase}comics?limit=8&offset=${baseOffset}&apikey=${apiKey}`
 		);
-		return this._transformCharacter(res.data.results[0]);
+		return comics.data.results.map(transformComics);
 	};
-	_transformCharacter = char => {
+	const getCharacter = async id => {
+		const res = await request(
+			`${apiBase}characters/${id}?apikey=${apiKey}`
+		);
+		return transformCharacter(res.data.results[0]);
+	};
+	const transformCharacter = char => {
 		return {
 			id: char.id,
 			name: char.name,
@@ -38,6 +37,21 @@ class MarvelService {
 			comics: char.comics.items,
 		};
 	};
-}
+	const transformComics = comics => {
+		return {
+			thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
+			title: comics.title,
+			prise: comics.prices[0].price,
+		};
+	};
+	return {
+		loading,
+		error,
+		getAllCharacters,
+		getCharacter,
+		clearError,
+		getAllComics,
+	};
+};
 
-export default MarvelService;
+export default useMarvelService;
