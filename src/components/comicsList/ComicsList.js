@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import useMarvelService from '../../servises/MarvelService';
 import ErrorMessage from '../errorMessage/errorMesssage';
 import Spinner from './../Spinner/Spinner';
@@ -7,12 +8,13 @@ import './comicsList.scss';
 const ComicsList = () => {
 	const [comicsList, setComicsList] = useState([]);
 	const [newItemLoading, setNewItemLoading] = useState(false);
-	const [offset, setOffset] = useState(210);
+	const [offset, setOffset] = useState(0);
 	// eslint-disable-next-line
 	const [charEnded, setCharEnded] = useState(false);
 	const { loading, error, getAllComics } = useMarvelService();
 
 	useEffect(() => {
+		//eslint-disable-next-line
 		onRequest(offset, true);
 		//eslint-disable-next-line
 	}, []);
@@ -43,7 +45,7 @@ const ComicsList = () => {
 			}
 			return (
 				<li key={i} className='comics__item'>
-					<a href='#'>
+					<Link to={`comics/${item.id}`}>
 						<img
 							src={item.thumbnail}
 							alt='ultimate war'
@@ -54,7 +56,7 @@ const ComicsList = () => {
 						<div className='comics__item-price'>
 							{`${item.prise}$` || 'NOT AVAILABLE'}
 						</div>
-					</a>
+					</Link>
 				</li>
 			);
 		});
